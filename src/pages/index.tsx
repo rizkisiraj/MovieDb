@@ -1,56 +1,42 @@
-import {
-  Link as ChakraLink,
-  Text,
-  Code,
-  List,
-  ListIcon,
-  ListItem,
-} from '@chakra-ui/react'
-import { CheckCircleIcon, LinkIcon } from '@chakra-ui/icons'
+import { Hero } from '../components/elements/hero/hero.component'
+import { MovieList } from '../components/modules/movie-list/movieList.component'
+import { GetStaticProps, InferGetStaticPropsType } from 'next'
+import Api_helpers from '../utils/api-endpoints/api_helpers'
+import Movie from '../utils/interfaces/Movie'
 
-import { Hero } from '../components/Hero'
-import { Container } from '../components/Container'
-import { Main } from '../components/Main'
-import { DarkModeSwitch } from '../components/DarkModeSwitch'
-import { CTA } from '../components/CTA'
-import { Footer } from '../components/Footer'
 
-const Index = () => (
-  <Container height="100vh">
-    <Hero />
-    <Main>
-      <Text color="text">
-        Example repository of <Code>Next.js</Code> + <Code>chakra-ui</Code> +{' '}
-        <Code>TypeScript</Code>.
-      </Text>
+export const getStaticProps: GetStaticProps<{ popularMovies:Movie[],upcomingMovies:Movie[] }> = async () => {
+  try {
+    let [popularMoviesResponse, upcomingMoviesResponse]= await Promise.all([
+      Api_helpers.getPopularMovies(),
+      Api_helpers.getUpcomingMovies(),
+    ]);
 
-      <List spacing={3} my={0} color="text">
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink
-            isExternal
-            href="https://chakra-ui.com"
-            flexGrow={1}
-            mr={2}
-          >
-            Chakra UI <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-        <ListItem>
-          <ListIcon as={CheckCircleIcon} color="green.500" />
-          <ChakraLink isExternal href="https://nextjs.org" flexGrow={1} mr={2}>
-            Next.js <LinkIcon />
-          </ChakraLink>
-        </ListItem>
-      </List>
-    </Main>
+    const popularMovies:Movie[] = popularMoviesResponse.results.slice(0,6);
+    const upcomingMovies:Movie[] = upcomingMoviesResponse.results.slice(0,6);
+    
+    return {
+      props: {
+        popularMovies,
+        upcomingMovies  
+      }
+    }
+  }
+  catch(err) {
+    console.log(err);
+  };
+  
+}
 
-    <DarkModeSwitch />
-    <Footer>
-      <Text>Next ❤️ Chakra</Text>
-    </Footer>
-    <CTA />
-  </Container>
-)
+const Index = ({ popularMovies, upcomingMovies }: InferGetStaticPropsType<typeof getStaticProps>) => {
+
+  return (
+    <>
+      <Hero />
+      <MovieList sectionTitle='Popular Movies' movies={popularMovies} />
+      <MovieList sectionTitle='Upcoming Movies' movies={upcomingMovies} />
+    </>
+  )
+}
 
 export default Index

@@ -1,7 +1,5 @@
 import { extendTheme } from '@chakra-ui/react'
 
-const fonts = { mono: `'Menlo', monospace` }
-
 const breakpoints = {
   sm: '40em',
   md: '52em',
@@ -10,11 +8,14 @@ const breakpoints = {
 }
 
 const theme = extendTheme({
+  fonts: {
+    heading: `'montserrat', sans-serif`,
+    body: `'montserrat', sans-serif`,
+  },
   semanticTokens: {
     colors: {
       text: {
-        default: '#16161D',
-        _dark: '#ade3b8',
+        default: 'gray.400',
       },
       heroGradientStart: {
         default: '#7928CA',
@@ -25,14 +26,13 @@ const theme = extendTheme({
         _dark: '#fbec8f',
       },
     },
-    radii: {
+    radio: {
       button: '12px',
     },
   },
   colors: {
     black: '#16161D',
   },
-  fonts,
   breakpoints,
 })
 
