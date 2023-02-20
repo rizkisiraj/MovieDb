@@ -1,8 +1,7 @@
-import { ChevronDownIcon, MoonIcon, Search2Icon } from "@chakra-ui/icons";
+import { ChevronDownIcon, Search2Icon } from "@chakra-ui/icons";
 import { MdOutlineFavorite, MdMovieCreation } from 'react-icons/md'
 import { Avatar, Flex, Heading, Input, InputGroup, InputRightElement, Box, Link, MenuButton, Menu, IconButton, Icon, MenuList, MenuItem, HStack, useColorMode, Tooltip, Switch } from "@chakra-ui/react";
 import NextLink from 'next/link'
-import theme from "../../../theme";
 import { useRouter } from "next/router";
 
 export const Navbar:React.FC = () => {
