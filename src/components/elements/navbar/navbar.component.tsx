@@ -1,16 +1,22 @@
 import { ChevronDownIcon, Search2Icon } from "@chakra-ui/icons";
 import { MdOutlineFavorite, MdMovieCreation } from 'react-icons/md'
-import { Avatar, Flex, Heading, Input, InputGroup, InputRightElement, Box, Link, MenuButton, Menu, IconButton, Icon, MenuList, MenuItem, HStack, useColorMode, Tooltip, Switch } from "@chakra-ui/react";
+import { Flex, Heading, Input, InputGroup, InputRightElement, Box, Link, MenuButton, Menu, IconButton, Icon, MenuList, MenuItem, HStack, useColorMode, Tooltip, Switch, Button, useToast } from "@chakra-ui/react";
 import NextLink from 'next/link'
 import { useRouter } from "next/router";
+import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { signOutUser } from "../../../utils/supabase/supabase";
+import { useState } from "react";
 
 export const Navbar:React.FC = () => {
   const router = useRouter();
+  const supabaseClient = useSupabaseClient();
+  const user = useUser();
+  const toast = useToast();
   const currentRoute = router.pathname;
   const { colorMode, toggleColorMode } = useColorMode();
-    return (
-      <>
-      <Box as="header" paddingX={16} paddingTop={4} marginBottom={16}>
+  const [isSigningOut, SetSigningOut] = useState(false);
+    return (     
+      <Box as="header" paddingX={16} paddingTop={4} marginBottom="48px">
         <Flex alignItems="center" justifyContent="space-between" marginBottom={4}>
           <Heading translate="no" as="h1" size="md" colorScheme="teal">MovieDb</Heading>
           <InputGroup maxW='50%'>  
@@ -21,13 +27,24 @@ export const Navbar:React.FC = () => {
             <Switch mr="16px" colorScheme="teal" onChange={toggleColorMode} isChecked={colorMode === 'light' ? false : true} />
             <Box display={{base: 'none', lg: 'block'}}>
             <Tooltip label="Favorite">
-              <IconButton aria-label="favorite movie link" as={NextLink} href="/" variant="ghost" colorScheme="teal" icon={<Icon as={MdOutlineFavorite} />} />
+              <IconButton aria-label="favorite movie link" as={NextLink} href="/favorite-movie" variant="ghost" colorScheme="teal" icon={<Icon as={MdOutlineFavorite} />} />
             </Tooltip>
             <Tooltip label="Watchlist">
               <IconButton aria-label="favorite movie link" as={NextLink} href="/" variant="ghost" colorScheme="teal" icon={<Icon as={MdMovieCreation} />} />
             </Tooltip>
             </Box>
-            <Avatar name='Dan Abrahmov' bgColor="teal" /> 
+            {
+              user ? <Button disabled={isSigningOut} colorScheme="teal" variant="solid" onClick={() => {
+                SetSigningOut(true);
+                signOutUser(supabaseClient);
+                toast({
+                  title: `log out success`,
+                  status: 'success',
+                  isClosable: true,
+                })
+              }} >{isSigningOut ? 'Signing out...' : 'Sign Out'}</Button> :
+              <Button as={NextLink} colorScheme="teal" variant="solid" href="/login">Sign In</Button>
+            }
           </HStack>
         </Flex>
         <Flex as="nav" justifyContent="center" gap={8}>
@@ -46,6 +63,5 @@ export const Navbar:React.FC = () => {
           </Menu>
         </Flex>
       </Box>
-      </>
     )
 }

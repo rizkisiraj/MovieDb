@@ -1,8 +1,9 @@
 import { Box, Text, Divider } from '@chakra-ui/react'
+import Head from 'next/head';
 import { useRouter } from 'next/router';
-import useSWR from 'swr'
-import { SwiperGallery } from '../../components/elements/gallery/gallery.component';
+import useSWR from 'swr';
 import MovieDetails from '../../components/elements/movie-details/movie-details.component';
+import MovieTabs from '../../components/elements/movie-tabs/movie-tabs.component';
 import API_ENDPOINT from '../../utils/api-endpoints/API_ENDPOINT';
 
 const fetcher = (url:string) => fetch(url).then(res => res.json());
@@ -15,12 +16,17 @@ const MoviePage = () => {
 
   return (
     <>
+    <Head>
+      <title>{movieData ? movieData.title : 'Loading...'}</title>
+    </Head>
     {
-      movieError ? <Text>Error bang</Text> : (!movieData ? <Text>Loading...</Text> : <MovieDetails movie={movieData} />)
+      movieError & creditsError ? <Text>Error bang</Text> : 
+      (!movieData || !creditsData ? <Text>Loading...</Text> : 
+      <MovieDetails movie={movieData}>
+        <MovieTabs crews={creditsData.crew} casts={creditsData.cast} />
+      </MovieDetails>
+      )
     }
-    <Box mt="14px" paddingX="16"> 
-    {creditsError ? <Text>Error bang</Text> : (!creditsData ? <Text>Loading...</Text> : <SwiperGallery cast={creditsData.cast} />)}
-    </Box>
     </>
   )
 }

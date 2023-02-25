@@ -4,7 +4,6 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next'
 import Api_helpers from '../utils/api-endpoints/api_helpers'
 import Movie from '../utils/interfaces/Movie'
 
-
 export const getStaticProps: GetStaticProps<{ popularMovies:Movie[],upcomingMovies:Movie[] }> = async () => {
   try {
     let [popularMoviesResponse, upcomingMoviesResponse]= await Promise.all([
@@ -33,8 +32,8 @@ const Index = ({ popularMovies, upcomingMovies }: InferGetStaticPropsType<typeof
   return (
     <>
       <Hero />
-      <MovieList sectionTitle='Popular Movies' movies={popularMovies} />
-      <MovieList sectionTitle='Upcoming Movies' movies={upcomingMovies} />
+      <MovieList type='short' sectionTitle='Popular Movies' movies={popularMovies} />
+      <MovieList type='short' sectionTitle='Upcoming Movies' movies={upcomingMovies} />
     </>
   )
 }

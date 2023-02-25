@@ -3,16 +3,38 @@ import API_ENDPOINT from "../../../utils/api-endpoints/API_ENDPOINT";
 import Movie from "../../../utils/interfaces/Movie";
 import { BsFillBookmarkFill } from 'react-icons/bs';
 import { MdOutlineFavorite } from 'react-icons/md';
+import movieHelpers from "../../../utils/helpers/movieHelper";
+import {  useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
+import { useEffect } from "react";
 
 const getYear = (date:string) => {
   return new Date(date).getFullYear()
 }
 
-const MovieDetails = ({ movie }:{ movie:Movie }) => {
+const MovieDetails = ({ movie, children }:{ movie:Movie, children:any }) => {
+    const supabaseClient = useSupabaseClient();
+    const user = useUser();
+
+    useEffect(() => {
+      
+    },[])
+
+    const onClickHandler = async (callback:any) => {
+      if( !user.id ) {
+        return
+      }
+
+      const response = await callback(supabaseClient, movie, user.id);
+
+      if( response.error ) {
+        console.log(response.error);
+      }
+    }
+
     return (
       <>
-      <Flex alignItems="center" padding="16" as="main" w="100%" paddingY="16px" gap="64px">
-        <Box minW="300px">
+      <Flex padding="16" as="main" w="100%" paddingY="16px" gap="64px">
+        <Box height="fit-content" position="sticky" top="10px" minW="300px">
           <AspectRatio w="100%" ratio={3 / 4} mb="16px">
             <Image borderRadius="20px" src={API_ENDPOINT.GET_MOVIE_IMAGE(movie.poster_path)} fallbackSrc="https://via.placeholder.com/300x400" alt="naruto" objectFit="cover" />
           </AspectRatio>
@@ -20,7 +42,10 @@ const MovieDetails = ({ movie }:{ movie:Movie }) => {
         </Box>
         <Flex direction="column" justifyContent="center" gap="16px">
           <Heading as="h2" size="lg" >{movie.title}<span style={{fontWeight: 'normal'}}>({getYear(movie.release_date)})</span></Heading>
-          <HStack><Button colorScheme="teal" rightIcon={<MdOutlineFavorite />}>Add to Favorite</Button><Button colorScheme="teal" rightIcon={<BsFillBookmarkFill />}>Add to Watchlist</Button></HStack>
+          <HStack>
+            <Button colorScheme="teal" rightIcon={<MdOutlineFavorite />} onClick={async () => onClickHandler(movieHelpers.addMovieToFavorite)}>Add to Favorite</Button>
+            <Button colorScheme="teal" rightIcon={<BsFillBookmarkFill />}>Add to Watchlist</Button>
+          </HStack>
           <Text fontStyle="italic" color="teal">{movie.tagline}</Text>
           <Box as="section">
             <Heading mb="8px" as="h2" size="md">STORYLINE</Heading>
@@ -31,6 +56,7 @@ const MovieDetails = ({ movie }:{ movie:Movie }) => {
             <Text><span style={{fontWeight: 'bold'}}>GENRES</span> : {movie.genres.map(genre => genre.name).join(",")}</Text>
             <Text><span style={{fontWeight: 'bold'}}>RUNTIME</span> : {movie.runtime} Minutes</Text>
           </Box>
+          { children }
         </Flex>
       </Flex>
       </>
