@@ -23,12 +23,22 @@ const movieHelpers = {
     return response;
   },
 
-  checkIfMovieExistFavorite: async (SupabaseClient:SupabaseClient, userId:string, movieId:string) => {
+  checkIfFavoriteMovieExist: async (SupabaseClient:SupabaseClient, userId:string, movieId:number) => {
     const response = await SupabaseClient
     .from('FavoriteMovie')
     .select('*', { count: 'exact', head: true })
-    .eq('movieId', movieId)
+    .eq('movie_id', movieId)
     .eq('user_id', userId)
+
+    return response;
+  },
+
+  removeFavoriteMovie: async (SupabaseClient:SupabaseClient, userId:string, movieId:number) => {
+    const response = await SupabaseClient
+    .from('FavoriteMovie')
+    .delete()
+    .eq('user_id', userId)
+    .eq('movie_id', movieId)
 
     return response;
   }

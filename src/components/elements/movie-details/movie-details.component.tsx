@@ -5,7 +5,7 @@ import { BsFillBookmarkFill } from 'react-icons/bs';
 import { MdOutlineFavorite } from 'react-icons/md';
 import movieHelpers from "../../../utils/helpers/movieHelper";
 import {  useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 
 const getYear = (date:string) => {
   return new Date(date).getFullYear()
@@ -14,21 +14,45 @@ const getYear = (date:string) => {
 const MovieDetails = ({ movie, children }:{ movie:Movie, children:any }) => {
     const supabaseClient = useSupabaseClient();
     const user = useUser();
+    const [isLoading, setLoading] = useState(false);
+    const [isFavorite, setFavorite] = useState(false);
 
     useEffect(() => {
-      
+      setLoading(true);
+      const checkFavoriteMovie = async () => {
+        const response = await movieHelpers.checkIfFavoriteMovieExist(supabaseClient,user.id,movie.id);
+        if(!response.error && response.count > 0) {
+          setFavorite(true);
+        }
+        setLoading(false);
+      }
+
+      checkFavoriteMovie();
     },[])
 
     const onClickHandler = async (callback:any) => {
-      if( !user.id ) {
+      if( !user.id) {
         return
+      }
+
+      if(isFavorite) {
+        const response = await movieHelpers.removeFavoriteMovie(supabaseClient, user.id, movie.id);
+        if(response.error) {
+          console.log(response.error);
+        } else {
+          setFavorite(false);
+        }
+        return;
       }
 
       const response = await callback(supabaseClient, movie, user.id);
 
       if( response.error ) {
         console.log(response.error);
+        return;
       }
+
+      setFavorite(true);
     }
 
     return (
@@ -43,7 +67,7 @@ const MovieDetails = ({ movie, children }:{ movie:Movie, children:any }) => {
         <Flex direction="column" justifyContent="center" gap="16px">
           <Heading as="h2" size="lg" >{movie.title}<span style={{fontWeight: 'normal'}}>({getYear(movie.release_date)})</span></Heading>
           <HStack>
-            <Button colorScheme="teal" rightIcon={<MdOutlineFavorite />} onClick={async () => onClickHandler(movieHelpers.addMovieToFavorite)}>Add to Favorite</Button>
+            <Button isDisabled={isLoading} colorScheme="teal" rightIcon={<MdOutlineFavorite />} onClick={async () => onClickHandler(movieHelpers.addMovieToFavorite)}>{isFavorite ? 'Remove from favorite' : 'Add to favorite'}</Button>
             <Button colorScheme="teal" rightIcon={<BsFillBookmarkFill />}>Add to Watchlist</Button>
           </HStack>
           <Text fontStyle="italic" color="teal">{movie.tagline}</Text>
