@@ -11,6 +11,18 @@ const Api_helpers = {
     const res = await fetch(API_ENDPOINT.GET_UPCOMING_MOVIES);
     const data = await res.json();
     return data;
+  },
+
+  getMoviesByKeywords: async (keyword:string) => {
+    const res = await fetch(API_ENDPOINT.GET_MOVIE_BY_KEYWORDS(keyword));
+    const data = await res.json();
+    return data;
+  },
+
+  getKeywords: async (keyword:string | string[]) => {
+    const res = await fetch(API_ENDPOINT.GET_KEYWORDS(keyword));
+    const data = await res.json();
+    return data;
   }
 }
 

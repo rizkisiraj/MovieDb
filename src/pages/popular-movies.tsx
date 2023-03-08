@@ -31,9 +31,9 @@ const PopularMovies = ({ movies }: InferGetStaticPropsType<typeof getStaticProps
       <Head>
         <title>Popular Movies</title>
       </Head>
-      <Box as="main">
+      {/* <Box as="main"> */}
         <MovieList type='full' movies={movies} sectionTitle="Popular Movies" />
-      </Box>
+      {/* </Box> */}
     </>
   )
 }

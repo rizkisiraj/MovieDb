@@ -1,4 +1,4 @@
-import { GridItem, Image, Text, HStack, AspectRatio, } from "@chakra-ui/react";
+import { GridItem, Image, Text, HStack, AspectRatio, Box, } from "@chakra-ui/react";
 import { StarIcon } from "@chakra-ui/icons";
 import Movie from "../../../utils/interfaces/Movie";
 import API_ENDPOINT from "../../../utils/api-endpoints/API_ENDPOINT";

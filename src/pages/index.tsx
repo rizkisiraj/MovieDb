@@ -1,8 +1,10 @@
-import { Hero } from '../components/elements/hero/hero.component'
-import { MovieList } from '../components/modules/movie-list/movieList.component'
-import { GetStaticProps, InferGetStaticPropsType } from 'next'
-import Api_helpers from '../utils/api-endpoints/api_helpers'
-import Movie from '../utils/interfaces/Movie'
+import { Hero } from '../components/elements/hero/hero.component';
+import { MovieList } from '../components/modules/movie-list/movieList.component';
+import { MovieCard } from '../components/elements/movie-card/movieCard.component';
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import Api_helpers from '../utils/api-endpoints/api_helpers';
+import Movie from '../utils/interfaces/Movie';
+import { Swiper, SwiperSlide } from 'swiper/react';
 
 export const getStaticProps: GetStaticProps<{ popularMovies:Movie[],upcomingMovies:Movie[] }> = async () => {
   try {

@@ -22,22 +22,22 @@ const MovieTabs = ({ casts, crews }:{ casts:Cast[], crews:Cast[] }) => {
 
     <TabPanels>
         <TabPanel>
-          <Grid templateColumns="repeat(3, 1fr)">
+          <Grid templateColumns={{base: "1fr" ,sm:"repeat(3, 1fr)"}}>
             {
-              casts.map(c => {
+              casts.map((c, index) => {
                 return (
-                  <CrewCastCard type='cast' person={c} />
+                  <CrewCastCard key={`${c.id}s${index}`} type='cast' person={c} />
                 )
               })
             }
           </Grid>
         </TabPanel>
         <TabPanel>
-          <Grid templateColumns="repeat(3, 1fr)" rowGap="24px">
+          <Grid templateColumns={{base: "1fr" ,sm:"repeat(3, 1fr)"}} rowGap="24px">
             {
-              crews.map(c => {
+              crews.map((c,index) => {
                 return (
-                  <CrewCastCard type='crew' person={c} />
+                  <CrewCastCard key={`${c.id}s${index}`} type='crew' person={c} />
                 )
               })
             }

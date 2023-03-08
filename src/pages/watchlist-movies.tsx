@@ -1,4 +1,4 @@
-import { Box, Text } from "@chakra-ui/react";
+import { Box, Text, Grid, GridItem, Skeleton } from "@chakra-ui/react";
 import { useSupabaseClient, useUser } from "@supabase/auth-helpers-react";
 import Head from "next/head";
 import { useEffect, useState } from "react";
@@ -28,11 +28,11 @@ const FavoriteMovie = () => {
     }
 
     useEffect(() => {
-      const getFavoriteMovieData = async () => {
+      const getWatchlistMovieData = async () => {
           if(user) {
-              const response = await movieHelpers.getFavoriteMovie(supabaseClient, user.id);
+              const response = await movieHelpers.getWatchlistMovie(supabaseClient, user.id);
               if( response.error ) {
-                console.error(response.error);
+                console.log(response.error);
                 setData([]);
               } else {
                 const dataDump = convertSupabaseDataToMovieObject(response.data);
@@ -42,7 +42,7 @@ const FavoriteMovie = () => {
           setLoading(false);
       }
 
-      getFavoriteMovieData();
+      getWatchlistMovieData();
     },[user])
 
     return (
@@ -50,16 +50,14 @@ const FavoriteMovie = () => {
       <Head>
         <title>Popular Movies</title>
       </Head>
-      <Box as="main">
       <Box as="main" minH="72vh" w="full">
       {
         loading ? 
         <SkeletonMovieList /> : (!data.length ? <Text align="center">No movies on your watchlist</Text> : 
             <MovieList type='full'
             movies={data}
-            sectionTitle="Favorite Movies" />)
+            sectionTitle="Watchlist Movies" />)
       }
-      </Box>
       </Box>
       </>
     )
