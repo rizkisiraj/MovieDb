@@ -4,7 +4,7 @@ import { Swiper, SwiperSlide } from "swiper/react";
 import Movie from "../../../utils/interfaces/Movie";
 import { MovieCard } from "../../elements/movie-card/movieCard.component";
 
-export const MovieList = ({ sectionTitle, movies, type }: { sectionTitle:string, movies:Movie[], type:'full' | 'short' }) => {
+export const MovieList = ({ sectionTitle, movies, type, link }: { sectionTitle:string, movies:Movie[], type:'full' | 'short', link?:string }) => {
   const [isSmallScreen] = useMediaQuery('(max-width: 640px)')
   
   return (
@@ -22,7 +22,7 @@ export const MovieList = ({ sectionTitle, movies, type }: { sectionTitle:string,
         { sectionTitle }
         </Heading>
         {
-          type === 'short' && <ChakraLink as={Link} href="/movies" color="GrayText">View all</ChakraLink>
+          type === 'short' && <ChakraLink as={Link} href={link} color="GrayText">View all</ChakraLink>
         }
       </Flex>
       {

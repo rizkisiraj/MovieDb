@@ -38,8 +38,8 @@ const Index = ({ popularMovies, upcomingMovies }: InferGetStaticPropsType<typeof
       <title>Movie App</title>
     </Head>
       <Hero />
-      <MovieList type='short' sectionTitle='Popular Movies' movies={popularMovies} />
-      <MovieList type='short' sectionTitle='Upcoming Movies' movies={upcomingMovies} />
+      <MovieList link='/popular-movies' type='short' sectionTitle='Popular Movies' movies={popularMovies} />
+      <MovieList link='/upcoming-movies' type='short' sectionTitle='Upcoming Movies' movies={upcomingMovies} />
     </>
   )
 }
