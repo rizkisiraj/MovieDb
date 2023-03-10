@@ -5,6 +5,7 @@ import { GetStaticProps, InferGetStaticPropsType } from 'next';
 import Api_helpers from '../utils/api-endpoints/api_helpers';
 import Movie from '../utils/interfaces/Movie';
 import { Swiper, SwiperSlide } from 'swiper/react';
+import Head from 'next/head';
 
 export const getStaticProps: GetStaticProps<{ popularMovies:Movie[],upcomingMovies:Movie[] }> = async () => {
   try {
@@ -33,6 +34,9 @@ const Index = ({ popularMovies, upcomingMovies }: InferGetStaticPropsType<typeof
 
   return (
     <>
+    <Head>
+      <title>Movie App</title>
+    </Head>
       <Hero />
       <MovieList type='short' sectionTitle='Popular Movies' movies={popularMovies} />
       <MovieList type='short' sectionTitle='Upcoming Movies' movies={upcomingMovies} />

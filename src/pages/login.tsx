@@ -30,7 +30,8 @@ const LoginPage = () => {
               button: {
                         backgroundColor: '#4FD1C5',
                         outline: 'none',
-                        border: 'none'
+                        border: 'none',
+                        padding: '1rem',
                       },
               label: {
                         color: '#718096'
@@ -38,8 +39,13 @@ const LoginPage = () => {
               input: {
                         backgroundColor: '#CBD5E0',
                         outline: 'none',
-                        borderRadius: '0px'
-                     }
+                        borderRadius: '0px',
+                        padding: '8px',
+                        color: '#000'
+                     },
+              anchor: {
+                        color: '#000'
+                     },
             }}}
             supabaseClient={supabaseClient}
             providers={['google', 'github']}
