@@ -13,3 +13,17 @@ export const supabaseKeyObject:SupabaseObject = {
 export const signOutUser = async (supabaseClient:SupabaseClient) => {
   await supabaseClient.auth.signOut();
 }
+
+export const githubSignIn = async (supabaseClient: SupabaseClient) => {
+  try {
+    const credObject = await supabaseClient.auth.signInWithOAuth({
+      provider: "github"
+    })
+  
+    if(credObject.error) {
+      throw credObject.error
+    }
+  } catch(err) {
+    console.log(err)
+  }
+}

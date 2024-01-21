@@ -1,8 +1,9 @@
-import { Auth, ThemeSupa } from '@supabase/auth-ui-react'
 import { useUser, useSupabaseClient } from '@supabase/auth-helpers-react'
 import { useEffect, useState } from 'react'
 import { useRouter } from 'next/router'
-import { Box, Flex, useToast } from '@chakra-ui/react'
+import { Button, Flex, useToast } from '@chakra-ui/react'
+import { FaGithub } from "react-icons/fa";
+import { githubSignIn } from '../utils/supabase/supabase'
 
 const LoginPage = () => {
   const router = useRouter()
@@ -23,35 +24,7 @@ const LoginPage = () => {
 
     return (
       <Flex minH="100vh" w="100%" bgColor={{base: "white" ,sm:"teal.700"}} justifyContent="center" alignItems="center">
-        <Box w="100%" bgColor="white" maxW="400px" padding="8" shadow={{base:"none" ,sm:"lg"}}>
-          <Auth
-            redirectTo='http://localhost:3000/'
-            appearance={{style: {
-              button: {
-                        backgroundColor: '#4FD1C5',
-                        outline: 'none',
-                        border: 'none',
-                        padding: '1rem',
-                      },
-              label: {
-                        color: '#718096'
-                     },
-              input: {
-                        backgroundColor: '#CBD5E0',
-                        outline: 'none',
-                        borderRadius: '0px',
-                        padding: '8px',
-                        color: '#000'
-                     },
-              anchor: {
-                        color: '#000'
-                     },
-            }}}
-            supabaseClient={supabaseClient}
-            providers={['google', 'github']}
-            socialLayout="horizontal"
-          />
-        </Box>
+          <Button colorScheme='teal' display={"flex"} gap="8px" onClick={() => githubSignIn(supabaseClient)}><span><FaGithub fontSize="24px" /></span> <span> Sign In</span></Button>
       </Flex>
     )
 }
